@@ -277,10 +277,10 @@ function transferClicks(index) {
   var counterCircle = document.querySelector(`#popup-counters .counter:nth-child(${index + 1}) .counter-circle`);
   counterCircle.textContent = counters[index];
 
-  // Prüfen, ob 30 überschritten wurde
-  if (counters[index] > 30) {
-    alert(`Spieler ${index + 1} hat 30 überschritten und ist eliminiert!`);
-    counters[index] = 30; // Begrenzen auf 30
+  // Prüfen, ob 50 überschritten wurde
+  if (counters[index] > 50) {
+    alert(`Spieler ${index + 1} hat 50 überschritten und ist eliminiert!`);
+    counters[index] = 50; // Begrenzen auf 50
     counterCircle.textContent = counters[index];
   }
 }
