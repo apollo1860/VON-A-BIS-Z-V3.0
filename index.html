@@ -1,125 +1,259 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VON A BIS Z</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #50586a;
+  :root{
+    --ink:#191720;
+    --ink-2:#242030;
+    --ink-3:#2e2938;
+    --pink:#c4577f;
+    --lime:#9dc46b;
+    --amber:#c97a4a;
+    --paper:#ece7ef;
+    --muted:#8b8296;
+    --radius:16px;
   }
-  #circle {
-    width: 200px;
-    height: 200px;
-    background-color: lightgray;
-    border-radius: 50%;
-    margin: 50px auto;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    text-align: center;
-    line-height: 1.2;
-  }
-  #categories {
-    text-align: center;
-    margin-top: 20px;
-  }
-  .letter {
-    display: inline-block;
-    padding: 15px 20px;
-    background-color: #d1d1d1;
-    border-radius: 5px;
-    margin: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .letter:active {
-    background-color: #000000;
-  }
-  .letter-row {
-    margin-bottom: 10px;
-  }
-  #click-counter {
-    font-weight: bold;
-    color: #ffffff;
-    text-align: center;
-    margin-top: 20px;
-  }
-  .counter-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-.popup-counters {
-  margin-top: 20px;
-}
 
-.counter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
+  *{ box-sizing:border-box; }
 
-.counter input {
-  flex: 1;
-  padding: 5px;
-  margin-right: 10px;
-  font-size: 14px;
-}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Space Grotesk', Arial, sans-serif;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(196,87,127,.10), transparent 55%),
+      radial-gradient(circle at 90% 100%, rgba(157,196,107,.06), transparent 45%),
+      var(--ink);
+    color:var(--paper);
+    padding:24px 16px 60px;
+    transition:background-color .6s ease;
+  }
 
-.counter-circle {
-  width: 40px;
-  height: 40px;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #d1d1d1;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid white;
-}
-  #end-timer {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    font-weight: bold;
-    font-size: 20px;
-    color: red;
-    display: none;
+  h1{
+    text-align:center;
+    font-family:'Anton', Arial, sans-serif;
+    font-weight:400;
+    letter-spacing:.06em;
+    font-size:clamp(28px, 8vw, 44px);
+    margin:8px 0 28px;
+    color:var(--paper);
+    text-shadow:0 0 12px rgba(196,87,127,.3);
   }
- .popup {
-  display: none;
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 90%; /* Breite passend für Mobilgeräte */
-  max-width: 400px; /* Begrenzte Breite für größere Geräte */
-  background-color: #fff;
-  padding: 20px;
-  border: 2px solid #000;
-  z-index: 1000;
-  border-radius: 10px; /* Abgerundete Ecken */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-  .popup-content {
-    text-align: center;
+  h1::after{
+    content:"";
+    display:block;
+    width:64px;
+    height:3px;
+    margin:12px auto 0;
+    background:linear-gradient(90deg, var(--pink), var(--lime));
+    border-radius:2px;
   }
-  .popup button {
-    margin-top: 10px;
+
+  #circle{
+    width:190px;
+    height:190px;
+    margin:10px auto 30px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    line-height:1.25;
+    font-family:'Anton', Arial, sans-serif;
+    font-weight:400;
+    letter-spacing:.02em;
+    font-size:19px;
+    color:var(--paper);
+    background:radial-gradient(circle at 35% 30%, #4a6b9e, #2c4a78 70%);
+    box-shadow:
+      0 0 0 6px rgba(74,107,158,.16),
+      0 0 24px rgba(74,107,158,.35),
+      inset 0 -6px 14px rgba(0,0,0,.18);
+    cursor:pointer;
+    animation:pulse 2.6s ease-in-out infinite;
+    transition:transform .12s ease, box-shadow .3s ease;
+    padding:20px;
+  }
+  #circle:active{
+    transform:scale(.94);
+  }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 6px rgba(74,107,158,.16), 0 0 24px rgba(74,107,158,.35), inset 0 -6px 14px rgba(0,0,0,.18); }
+    50%{ box-shadow:0 0 0 9px rgba(74,107,158,.10), 0 0 34px rgba(74,107,158,.5), inset 0 -6px 14px rgba(0,0,0,.18); }
+  }
+
+  #categories{
+    text-align:center;
+    margin-top:8px;
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .letter{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    width:38px;
+    height:38px;
+    background:var(--ink-2);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:10px;
+    margin:4px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--paper);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background-color .15s ease, transform .1s ease, border-color .15s ease;
+  }
+  .letter:active{
+    transform:scale(.9);
+  }
+  .letter.used{
+    background:var(--lime);
+    border-color:var(--lime);
+    color:var(--ink);
+  }
+  .letter-row{
+    margin-bottom:6px;
+  }
+
+  .counter-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:20px;
+  }
+  #click-counter{
+    text-align:center;
+    margin-top:26px;
+    font-size:15px;
+    color:var(--muted);
+    letter-spacing:.04em;
+  }
+  #click-counter span{
+    font-family:'Anton', Arial, sans-serif;
+    font-size:22px;
+    color:var(--lime);
+    margin-left:4px;
+  }
+
+  #end-timer{
+    position:fixed;
+    top:16px;
+    right:16px;
+    font-family:'Anton', Arial, sans-serif;
+    font-size:18px;
+    letter-spacing:.04em;
+    color:var(--ink);
+    background:linear-gradient(135deg, var(--amber), var(--pink));
+    padding:8px 14px;
+    border-radius:999px;
+    box-shadow:0 4px 14px rgba(201,122,74,.30);
+    display:none;
+  }
+
+  .popup{
+    display:none;
+    position:fixed;
+    top:8%;
+    left:50%;
+    transform:translate(-50%, 0);
+    width:90%;
+    max-width:400px;
+    background:var(--ink-2);
+    padding:26px 22px;
+    border:1px solid rgba(255,255,255,.08);
+    z-index:1000;
+    border-radius:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .popup-content{
+    text-align:center;
+  }
+  .popup-content h2{
+    font-family:'Anton', Arial, sans-serif;
+    font-weight:400;
+    letter-spacing:.04em;
+    font-size:26px;
+    margin:0 0 6px;
+    color:var(--pink);
+  }
+  .popup-content p{
+    color:var(--muted);
+    margin:0 0 18px;
+  }
+  .popup-content p span{
+    color:var(--lime);
+    font-weight:700;
+  }
+  .popup button{
+    margin-top:16px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg, var(--pink), var(--amber));
+    color:var(--ink);
+    font-family:'Anton', Arial, sans-serif;
+    font-size:16px;
+    letter-spacing:.04em;
+    cursor:pointer;
+  }
+
+  .popup-counters{
+    margin-top:10px;
+  }
+  .counter{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    gap:10px;
+  }
+  .counter input{
+    flex:1;
+    padding:10px 12px;
+    font-size:14px;
+    background:var(--ink-3);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:10px;
+    color:var(--paper);
+    font-family:'Space Grotesk', Arial, sans-serif;
+  }
+  .counter input::placeholder{
+    color:var(--muted);
+  }
+  .counter-circle{
+    width:42px;
+    height:42px;
+    flex:none;
+    font-size:15px;
+    font-weight:700;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:var(--ink-3);
+    border-radius:50%;
+    cursor:pointer;
+    border:2px solid var(--lime);
+    color:var(--paper);
+    transition:transform .1s ease;
+  }
+  .counter-circle:active{
+    transform:scale(.9);
   }
 </style>
 </head>
 <body>
 
-<h1 style="text-align:center; color: white;">Von A bis Z</h1>
+<h1>Von A bis Z</h1>
 
 <div id="circle" onclick="showCategory()">Klicke hier<br>für eine Kategorie</div>
 
@@ -221,13 +355,18 @@
   }
 
   function clickLetter(letter) {
-    letter.style.backgroundColor = "#808080";
-    clicks++;
+    if (letter.classList.contains("used")) {
+      letter.classList.remove("used");
+      clicks--;
+    } else {
+      letter.classList.add("used");
+      clicks++;
+    }
     document.getElementById("clicks").textContent = clicks;
   }
 
   function startTimers() {
-    var endTimerDuration = Math.floor(Math.random() * (45000 - 5000 + 1)) + 5000;
+    var endTimerDuration = Math.floor(Math.random() * (55000 - 12000 + 1)) + 12000;
     var timerElement = document.getElementById("end-timer");
     timerElement.textContent = "00:00";
     timerElement.style.display = "block";
@@ -252,14 +391,17 @@
   }
 
   function endRound() {
-    document.body.style.backgroundColor = "red";
+    document.body.style.backgroundColor = "#8a3530";
+    if (navigator.vibrate) {
+      navigator.vibrate([200, 100, 200]);
+    }
     var clicks = document.getElementById("clicks").textContent;
     document.getElementById("popup-clicks").textContent = clicks;
     document.getElementById("popup").style.display = "block";
   }
 
   function resetGame() {
-    document.body.style.backgroundColor = "#50586a";
+    document.body.style.backgroundColor = "";
     document.getElementById("end-timer").style.display = "none";
     document.getElementById("circle").innerHTML = "Klicke hier<br>für eine Kategorie";
     document.getElementById("categories").innerHTML = "";
@@ -288,4 +430,3 @@ function transferClicks(index) {
 
 </body>
 </html>
-
