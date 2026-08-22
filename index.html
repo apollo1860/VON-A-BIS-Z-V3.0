@@ -276,6 +276,16 @@
   .counter-circle:active{
     transform:scale(.9);
   }
+
+  /* Visueller Alarm für iOS (kein Vibrations-API-Support) */
+  @keyframes flash-alert{
+    0%, 100%{ background-color: var(--ink); }
+    10%, 30%, 50%, 70%, 90%{ background-color: #ff4d4d; }
+    20%, 40%, 60%, 80%{ background-color: var(--ink); }
+  }
+  body.flash-alert{
+    animation: flash-alert 1.4s ease-in-out;
+  }
 </style>
 </head>
 <body>
@@ -347,6 +357,41 @@
   var clicks = 0;
   var timerInterval;
 
+  // --- Audio-Setup für den Alarm-Ton (funktioniert auch parallel zu laufender Musik) ---
+  var audioCtx = null;
+  function unlockAudio() {
+    // Muss innerhalb einer User-Geste erstellt werden, damit iOS Safari Sound erlaubt
+    if (!audioCtx) {
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        audioCtx = null;
+      }
+    }
+    if (audioCtx && audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+  }
+
+  function playAlertSound() {
+    if (!audioCtx) return;
+    var now = audioCtx.currentTime;
+    // Sechs kurze Beeps (doppelt so lang wie vorher)
+    [0, 0.7, 1.4, 2.1, 2.8, 3.5].forEach(function (offset) {
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = "square";
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.0001, now + offset);
+      gain.gain.exponentialRampToValueAtTime(0.5, now + offset + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.5);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + offset);
+      osc.stop(now + offset + 0.6);
+    });
+  }
+
   function selectCategory() {
     if (categories.length === 0) {
       console.log("Keine Kategorien mehr verfügbar.");
@@ -359,6 +404,7 @@
   }
 
   function showCategory() {
+    unlockAudio(); // User-Geste: Audio-Kontext für iOS freischalten
     var introElement = document.getElementById("intro");
     if (introElement) {
       introElement.style.display = "none";
@@ -435,9 +481,20 @@
 
   function endRound() {
     document.body.style.backgroundColor = "#8a3530";
+
+    // Android: Vibration
     if (navigator.vibrate) {
       navigator.vibrate([200, 100, 200]);
     }
+
+    // Alle Geräte: Signalton
+    playAlertSound();
+
+    // Alle Geräte: visueller Blitz-Effekt (v.a. für iOS gedacht)
+    document.body.classList.remove("flash-alert");
+    void document.body.offsetWidth; // Reflow erzwingen, damit die Animation neu startet
+    document.body.classList.add("flash-alert");
+
     var clicks = document.getElementById("clicks").textContent;
     document.getElementById("popup-clicks").textContent = clicks;
     document.getElementById("popup").style.display = "block";
@@ -445,6 +502,7 @@
 
   function resetGame() {
     document.body.style.backgroundColor = "";
+    document.body.classList.remove("flash-alert");
     document.getElementById("end-timer").style.display = "none";
     document.getElementById("circle").innerHTML = "Klicke hier<br>für eine Kategorie";
     document.getElementById("categories").innerHTML = "";
@@ -473,3 +531,4 @@ function transferClicks(index) {
 
 </body>
 </html>
+
